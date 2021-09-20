@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Footer from './Footer'
 
 // Our Components
-import Header from './Header'
-import HomeGuest from './HomeGuest'
+import Header from './components/Header'
+import HomeGuest from './components/HomeGuest'
+import Footer from './components/Footer'
 
 function Main() {
   return (
