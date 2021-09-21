@@ -1,4 +1,5 @@
 const path = require('path')
+const Dotenv = require('dotenv-webpack')
 
 module.exports = {
   entry: './app/Main.js',
@@ -7,6 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, 'app'),
     filename: 'bundled.js'
   },
+  plugins: [new Dotenv()],
   mode: 'development',
   devtool: 'source-map',
   devServer: {

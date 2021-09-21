@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import Axios from 'axios'
+Axios.defaults.baseURL = process.env.BACKENDURL || 'http://m2-social.herokuapp.com/'
 
 // Our Components
 import Header from './components/Header'
