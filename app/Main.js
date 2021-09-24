@@ -6,6 +6,7 @@ Axios.defaults.baseURL = process.env.BACKENDURL || 'http://m2-social.herokuapp.c
 
 // Our Components
 import Header from './components/Header'
+import FlashMessages from './components/FlashMessages'
 import HomeGuest from './components/HomeGuest'
 import Footer from './components/Footer'
 import About from './components/About'
@@ -16,16 +17,22 @@ import SinglePost from './components/SinglePost'
 
 function Main() {
   const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem('complexappToken')))
+  const [flashMessages, setFlashMessages] = useState([])
+
+  function addFlashMessages(msg) {
+    setFlashMessages(prev => prev.concat(msg))
+  }
 
   return (
     <BrowserRouter>
       <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+      <FlashMessages messages={flashMessages} />
       <Switch>
         <Route path="/" exact>
           {loggedIn ? <Home /> : <HomeGuest />}
         </Route>
         <Route path="/create-post">
-          <CreatePost />
+          <CreatePost setFlashMessages={addFlashMessages} />
         </Route>
         <Route path="/post/:id">
           <SinglePost />
