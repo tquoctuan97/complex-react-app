@@ -11,7 +11,6 @@ function SinglePost() {
   useEffect(async () => {
     try {
       const response = await Axios.get(`/post/${id}`)
-      console.log(response.data)
       if (response.data) {
         setPost(response.data)
         setHasPost(true)
