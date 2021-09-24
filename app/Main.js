@@ -11,6 +11,7 @@ import Footer from './components/Footer'
 import About from './components/About'
 import Terms from './components/Terms'
 import Home from './components/Home'
+import CreatePost from './components/CreatePost'
 
 function Main() {
   const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem('complexappToken')))
@@ -21,6 +22,9 @@ function Main() {
       <Switch>
         <Route path="/" exact>
           {loggedIn ? <Home /> : <HomeGuest />}
+        </Route>
+        <Route path="/create-post">
+          <CreatePost />
         </Route>
         <Route path="/about-us">
           <About />
