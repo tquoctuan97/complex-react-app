@@ -1,13 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import ExampleContext from '../../exampleContext'
 
 function HeaderLoggedIn(props) {
+  const { setLoggedIn } = useContext(ExampleContext)
+
   function handleLogout() {
     localStorage.removeItem('complexappToken')
     localStorage.removeItem('complexappUsername')
     localStorage.removeItem('complexappAvatar')
-    props.setLoggedIn(false)
+    setLoggedIn(false)
   }
+
   return (
     <div className="flex-row my-3 my-md-0">
       <a href="#" className="text-white mr-2 header-search-icon">
