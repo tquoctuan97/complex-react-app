@@ -18,6 +18,7 @@ import Terms from './components/Terms'
 import Home from './components/Home'
 import CreatePost from './components/CreatePost'
 import SinglePost from './components/SinglePost'
+import Profile from './components/Profile'
 
 function Main() {
   const initialState = {
@@ -72,6 +73,9 @@ function Main() {
             </Route>
             <Route path="/create-post">
               <CreatePost />
+            </Route>
+            <Route path="/profile/:username">
+              <Profile />
             </Route>
             <Route path="/post/:id">
               <SinglePost />
