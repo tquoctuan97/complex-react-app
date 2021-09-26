@@ -1,8 +1,9 @@
 import Axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import Page from './Page'
 import StateContext from '../StateContext'
+import Page from './Page'
+import ProfilePosts from './ProfilePosts'
 
 function Profile() {
   const appState = useContext(StateContext)
@@ -14,13 +15,16 @@ function Profile() {
     counts: { postCount: 0, followerCount: 0, followingCount: 0 }
   })
 
-  useEffect(async () => {
-    try {
-      const response = await Axios.get(`/profile/${username}`, { token: appState.user.token })
-      setProfileData(response.data)
-    } catch (e) {
-      console.log(e)
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await Axios.get(`/profile/${username}`, { token: appState.user.token })
+        setProfileData(response.data)
+      } catch (e) {
+        console.log(e)
+      }
     }
+    fetchData()
   }, [])
 
   return (
@@ -50,20 +54,7 @@ function Profile() {
         </a>
       </div>
 
-      <div className="list-group">
-        <a href="#" className="list-group-item list-group-item-action">
-          <img className="avatar-tiny" src="https://gravatar.com/avatar/b9408a09298632b5151200f3449434ef?s=128" /> <strong>Example Post #1</strong>
-          <span className="text-muted small">on 2/10/2020 </span>
-        </a>
-        <a href="#" className="list-group-item list-group-item-action">
-          <img className="avatar-tiny" src="https://gravatar.com/avatar/b9408a09298632b5151200f3449434ef?s=128" /> <strong>Example Post #2</strong>
-          <span className="text-muted small">on 2/10/2020 </span>
-        </a>
-        <a href="#" className="list-group-item list-group-item-action">
-          <img className="avatar-tiny" src="https://gravatar.com/avatar/b9408a09298632b5151200f3449434ef?s=128" /> <strong>Example Post #3</strong>
-          <span className="text-muted small">on 2/10/2020 </span>
-        </a>
-      </div>
+      <ProfilePosts />
     </Page>
   )
 }
