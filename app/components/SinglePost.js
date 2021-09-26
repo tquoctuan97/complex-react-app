@@ -1,29 +1,37 @@
 import Axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
+import { Link } from 'react-router-dom'
 import Page from './Page'
 
 function SinglePost() {
   const { id } = useParams()
-  const [hasPost, setHasPost] = useState()
+  const [isLoading, setIsLoading] = useState(false)
   const [post, setPost] = useState()
 
-  useEffect(async () => {
-    try {
-      const response = await Axios.get(`/post/${id}`)
-      if (response.data) {
-        setPost(response.data)
-        setHasPost(true)
+  useEffect(() => {
+    async function fetchPost() {
+      try {
+        const response = await Axios.get(`/post/${id}`)
+        if (response.data) {
+          setPost(response.data)
+          setIsLoading(true)
+        }
+      } catch (e) {
+        console.log(e)
       }
-    } catch (e) {
-      console.log(e)
     }
+    fetchPost()
   }, [])
+
+  if (!isLoading) {
+    return <Page title="...">Loading...</Page>
+  }
 
   return (
     <Page title="Example Post Title">
       <div className="d-flex justify-content-between">
-        <h2>{hasPost ? post.title : ''}</h2>
+        <h2>{post.title}</h2>
         <span className="pt-2">
           <a href="#" className="text-primary mr-2" title="Edit">
             <i className="fas fa-edit"></i>
@@ -35,13 +43,13 @@ function SinglePost() {
       </div>
 
       <p className="text-muted small mb-4">
-        <a href="#">
-          <img className="avatar-tiny" src={hasPost ? post.author.avatar : ''} />
-        </a>
-        Posted by <a href="#">{hasPost ? post.author.username : ''}</a> on {hasPost ? post.createdDate : ''}
+        <Link to={`/profile/${post.author.username}`}>
+          <img className="avatar-tiny" src={post.author.avatar} />
+        </Link>
+        Posted by <Link to={`/profile/${post.author.username}`}>{post.author.username}</Link> on {post.createdDate}
       </p>
 
-      <div className="body-content">{hasPost ? post.body : ''}</div>
+      <div className="body-content">{post.body}</div>
     </Page>
   )
 }
