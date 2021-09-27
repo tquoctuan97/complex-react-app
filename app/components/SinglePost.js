@@ -28,6 +28,9 @@ function SinglePost() {
     return <Page title="...">Loading...</Page>
   }
 
+  const createdDate = new Date(post.createdDate)
+  const dateFormat = `${createdDate.getMonth() + 1}/${createdDate.getDate()}/${createdDate.getFullYear()}`
+
   return (
     <Page title="Example Post Title">
       <div className="d-flex justify-content-between">
@@ -46,7 +49,7 @@ function SinglePost() {
         <Link to={`/profile/${post.author.username}`}>
           <img className="avatar-tiny" src={post.author.avatar} />
         </Link>
-        Posted by <Link to={`/profile/${post.author.username}`}>{post.author.username}</Link> on {post.createdDate}
+        Posted by <Link to={`/profile/${post.author.username}`}>{post.author.username}</Link> on {dateFormat}
       </p>
 
       <div className="body-content">{post.body}</div>
