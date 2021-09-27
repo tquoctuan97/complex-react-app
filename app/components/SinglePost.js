@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import Page from './Page'
-import LoadingDotIcon from './LoadingDotIcon'
+import LoadingDotsIcon from './LoadingDotsIcon'
 
 function SinglePost() {
   const { id } = useParams()
@@ -28,7 +28,7 @@ function SinglePost() {
   if (!isLoading) {
     return (
       <Page title="...">
-        <LoadingDotIcon />
+        <LoadingDotsIcon />
       </Page>
     )
   }
