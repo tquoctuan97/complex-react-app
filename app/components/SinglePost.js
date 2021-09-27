@@ -4,6 +4,7 @@ import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import Page from './Page'
 import LoadingDotsIcon from './LoadingDotsIcon'
+import ReactMarkdown from 'react-markdown'
 
 function SinglePost() {
   const { id } = useParams()
@@ -62,7 +63,9 @@ function SinglePost() {
         Posted by <Link to={`/profile/${post.author.username}`}>{post.author.username}</Link> on {dateFormat}
       </p>
 
-      <div className="body-content">{post.body}</div>
+      <div className="body-content">
+        <ReactMarkdown source={post.body} allowedTypes={['paragraph', 'strong', 'emphasis', 'text', 'heading', 'image', 'list', 'listItem']} />
+      </div>
     </Page>
   )
 }
