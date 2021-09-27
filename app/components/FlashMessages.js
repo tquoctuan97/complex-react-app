@@ -4,9 +4,10 @@ function FlashMessages(props) {
   return (
     <div className="floating-alerts">
       {props.messages.map((msg, index) => {
+        const addClass = msg.status == 'error' ? 'alert-danger' : 'alert-success'
         return (
-          <div key={index} className="alert alert-success text-center floating-alert">
-            {msg}
+          <div key={index} className={`alert ${addClass} text-center floating-alert`}>
+            {msg.content}
           </div>
         )
       })}

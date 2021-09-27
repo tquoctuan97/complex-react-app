@@ -25,7 +25,7 @@ function UpdatePost(props) {
           setBody(response.data.body)
           setIsLoading(true)
         } else {
-          appDispatch({ type: 'messages', value: 'No Permission' })
+          appDispatch({ type: 'messages', value: { status: 'error', content: 'No Permission' } })
           props.history.push(`/post/${id}`)
         }
       } catch (e) {
@@ -43,14 +43,14 @@ function UpdatePost(props) {
     try {
       const response = await Axios.post(`/post/${id}/edit`, { title, body, token: appState.user.token })
       if (response.data == 'success') {
-        appDispatch({ type: 'messages', value: 'Edited Post Successfully' })
+        appDispatch({ type: 'messages', value: { status: 'success', content: 'Edited Post Successfully' } })
         props.history.push(`/post/${id}`)
       }
       if (response.data == 'failure') {
-        appDispatch({ type: 'messages', value: 'Edited Post Failure' })
+        appDispatch({ type: 'messages', value: { status: 'error', content: 'Edited Post Failure' } })
       }
       if (response.data == 'no permissions') {
-        appDispatch({ type: 'messages', value: 'No Permission' })
+        appDispatch({ type: 'messages', value: { status: 'error', content: 'No Permission' } })
       }
     } catch (e) {
       console.log(e)
