@@ -39,6 +39,7 @@ function Main() {
         return
       case 'logout':
         draft.loggedIn = false
+        draft.user = {}
         return
       case 'messages':
         draft.flashMessages.push(action.value)
@@ -58,8 +59,7 @@ function Main() {
       localStorage.removeItem('complexappUsername')
       localStorage.removeItem('complexappAvatar')
     }
-  }),
-    [state.loggedIn]
+  }, [state.loggedIn])
 
   return (
     <StateContext.Provider value={state}>
