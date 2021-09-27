@@ -19,6 +19,7 @@ import Home from './components/Home'
 import CreatePost from './components/CreatePost'
 import ViewSinglePost from './components/ViewSinglePost'
 import Profile from './components/Profile'
+import UpdatePost from './components/UpdatePost'
 
 function Main() {
   const initialState = {
@@ -81,7 +82,7 @@ function Main() {
               <ViewSinglePost />
             </Route>
             <Route path="/post/:id/edit">
-              <CreatePost />
+              <UpdatePost />
             </Route>
             <Route path="/about-us">
               <About />
