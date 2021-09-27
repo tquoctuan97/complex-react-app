@@ -17,7 +17,7 @@ import About from './components/About'
 import Terms from './components/Terms'
 import Home from './components/Home'
 import CreatePost from './components/CreatePost'
-import SinglePost from './components/SinglePost'
+import ViewSinglePost from './components/ViewSinglePost'
 import Profile from './components/Profile'
 
 function Main() {
@@ -77,8 +77,11 @@ function Main() {
             <Route path="/profile/:username">
               <Profile />
             </Route>
-            <Route path="/post/:id">
-              <SinglePost />
+            <Route path="/post/:id" exact>
+              <ViewSinglePost />
+            </Route>
+            <Route path="/post/:id/edit">
+              <CreatePost />
             </Route>
             <Route path="/about-us">
               <About />

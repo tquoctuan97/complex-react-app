@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 
@@ -7,10 +7,12 @@ import { Link } from 'react-router-dom'
 import Page from './Page'
 import LoadingDotsIcon from './LoadingDotsIcon'
 import ReactMarkdown from 'react-markdown'
-import ReactTooltip from 'react-tooltip'
+import ActionSinglePost from './ActionSinglePost'
+import StateContext from '../StateContext'
 
-function SinglePost() {
+function ViewSinglePost() {
   const { id } = useParams()
+  const appState = useContext(StateContext)
   const [isLoading, setIsLoading] = useState(false)
   const [post, setPost] = useState()
 
@@ -49,16 +51,7 @@ function SinglePost() {
     <Page title="Example Post Title">
       <div className="d-flex justify-content-between">
         <h2>{post.title}</h2>
-        <span className="pt-2">
-          <a href="#" data-tip="Edit" data-for="edit" className="text-primary mr-2">
-            <i className="fas fa-edit"></i>
-          </a>{' '}
-          <ReactTooltip id="edit" className="custom-tooltip" />
-          <a data-tip="Delete" data-for="delete" className="delete-post-button text-danger">
-            <i className="fas fa-trash"></i>
-          </a>
-          <ReactTooltip id="delete" className="custom-tooltip" />
-        </span>
+        {appState.user.username == post.author.username ? <ActionSinglePost id={post._id} /> : ''}
       </div>
 
       <p className="text-muted small mb-4">
@@ -75,4 +68,4 @@ function SinglePost() {
   )
 }
 
-export default SinglePost
+export default ViewSinglePost
