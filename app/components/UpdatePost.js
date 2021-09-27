@@ -1,6 +1,7 @@
 import Axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams, withRouter } from 'react-router'
+import { Link } from 'react-router-dom'
 import DispatchContext from '../DispatchContext'
 import StateContext from '../StateContext'
 import LoadingDotsIcon from './LoadingDotsIcon'
@@ -19,10 +20,13 @@ function UpdatePost(props) {
     async function fetchPost() {
       try {
         const response = await Axios.get(`/post/${id}`, { cancelToken: ourRequest.token })
-        if (response.data) {
+        if (response.data.author.username == appState.user.username) {
           setTitle(response.data.title)
           setBody(response.data.body)
           setIsLoading(true)
+        } else {
+          appDispatch({ type: 'messages', value: 'No Permission' })
+          props.history.push(`/post/${id}`)
         }
       } catch (e) {
         console.log('There was a problem or the request was cancelled')
@@ -38,8 +42,16 @@ function UpdatePost(props) {
     e.preventDefault()
     try {
       const response = await Axios.post(`/post/${id}/edit`, { title, body, token: appState.user.token })
-      appDispatch({ type: 'messages', value: 'Edited Post Successfully' })
-      props.history.push(`/post/${id}`)
+      if (response.data == 'success') {
+        appDispatch({ type: 'messages', value: 'Edited Post Successfully' })
+        props.history.push(`/post/${id}`)
+      }
+      if (response.data == 'failure') {
+        appDispatch({ type: 'messages', value: 'Edited Post Failure' })
+      }
+      if (response.data == 'no permissions') {
+        appDispatch({ type: 'messages', value: 'No Permission' })
+      }
     } catch (e) {
       console.log(e)
     }
@@ -55,7 +67,10 @@ function UpdatePost(props) {
 
   return (
     <Page title="Create Post">
-      <form onSubmit={handleSubmit}>
+      <Link className="small font-weight-bold" to={`/post/${id}`}>
+        « Back to post permaklink
+      </Link>
+      <form className="mt-3" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="post-title" className="text-muted mb-1">
             <small>Title</small>
