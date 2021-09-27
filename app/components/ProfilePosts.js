@@ -19,7 +19,7 @@ function ProfilePosts() {
       }
     }
     fecthData()
-  }, [])
+  }, [username])
 
   if (!isLoading) {
     return 'Loading...'
@@ -32,7 +32,7 @@ function ProfilePosts() {
         const dateFormat = `${createdDate.getMonth() + 1}/${createdDate.getDate()}/${createdDate.getFullYear()}`
 
         return (
-          <Link to={`/post/${post._id}`} className="list-group-item list-group-item-action">
+          <Link key={post._id} to={`/post/${post._id}`} className="list-group-item list-group-item-action">
             <img className="avatar-tiny" src={post.author.avatar} /> <strong>{post.title}</strong>
             <span className="text-muted small"> on {dateFormat} </span>
           </Link>

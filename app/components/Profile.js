@@ -25,7 +25,7 @@ function Profile() {
       }
     }
     fetchData()
-  }, [])
+  }, [username])
 
   return (
     <Page title={`Profile ${username}`}>
