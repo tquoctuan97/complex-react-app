@@ -19,6 +19,7 @@ import Home from './components/Home'
 import CreatePost from './components/CreatePost'
 import SinglePost from './components/SinglePost'
 import Profile from './components/Profile'
+import UpdatePost from './components/UpdatePost'
 
 function Main() {
   const initialState = {
@@ -77,8 +78,11 @@ function Main() {
             <Route path="/profile/:username">
               <Profile />
             </Route>
-            <Route path="/post/:id">
+            <Route path="/post/:id" exact>
               <SinglePost />
+            </Route>
+            <Route path="/post/:id/edit" exact>
+              <UpdatePost />
             </Route>
             <Route path="/about-us">
               <About />
