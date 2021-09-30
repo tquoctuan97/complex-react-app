@@ -6,6 +6,7 @@ import { useImmerReducer } from 'use-immer'
 // Components
 import Page from './Page'
 import LoadingDotsIcon from './LoadingDotsIcon'
+import NotFound from './NotFound'
 import StateContext from '../StateContext'
 import DispatchContext from '../DispatchContext'
 
@@ -27,7 +28,7 @@ function UpdatePost(props) {
     isFetching: true,
     isSaving: false,
     id: useParams().id,
-    sentCount: 0,
+    sendCount: 0,
     notFound: false
   }
 
@@ -48,7 +49,7 @@ function UpdatePost(props) {
         return
       case 'submitRequest':
         if (!draft.title.hasError && !draft.body.hasError) {
-          draft.sentCount++
+          draft.sendCount++
           draft.isSaving = true
         }
         return
@@ -63,11 +64,16 @@ function UpdatePost(props) {
           draft.title.hasError = true
           draft.title.message = 'You must provide a title.'
         }
+        return
       case 'bodyRules':
         if (!action.value.trim()) {
           draft.body.hasError = true
           draft.body.message = 'You must provide a body content.'
         }
+        return
+      case 'notFound':
+        draft.notFound = true
+        return
     }
   }
 
@@ -88,6 +94,8 @@ function UpdatePost(props) {
         const response = await Axios.get(`/post/${state.id}`, { cancelToken: ourRequest.token })
         if (response.data) {
           dispatch({ type: 'fetchComplete', value: response.data })
+        } else {
+          dispatch({ type: 'notFound' })
         }
       } catch (e) {
         console.log('There was a problem or the request was cancelled')
@@ -100,7 +108,7 @@ function UpdatePost(props) {
   }, [])
 
   useEffect(() => {
-    if (state.sentCount) {
+    if (state.sendCount) {
       dispatch({ type: 'saveRequestStarted' })
       const ourRequest = Axios.CancelToken.source()
 
@@ -129,7 +137,11 @@ function UpdatePost(props) {
         ourRequest.cancel()
       }
     }
-  }, [state.sentCount])
+  }, [state.sendCount])
+
+  if (state.notFound) {
+    return <NotFound />
+  }
 
   if (state.isFetching) {
     return (
