@@ -20,6 +20,7 @@ import CreatePost from './components/CreatePost'
 import SinglePost from './components/SinglePost'
 import Profile from './components/Profile'
 import UpdatePost from './components/UpdatePost'
+import NotFound from './components/NotFound'
 
 function Main() {
   const initialState = {
@@ -89,6 +90,9 @@ function Main() {
             </Route>
             <Route path="/terms">
               <Terms />
+            </Route>
+            <Route>
+              <NotFound />
             </Route>
           </Switch>
           <Footer />
