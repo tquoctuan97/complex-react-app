@@ -2,12 +2,13 @@ import Axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
+import ReactMarkdown from 'react-markdown'
+import ReactTooltip from 'react-tooltip'
 
 // Components
 import Page from './Page'
 import LoadingDotsIcon from './LoadingDotsIcon'
-import ReactMarkdown from 'react-markdown'
-import ReactTooltip from 'react-tooltip'
+import NotFound from './NotFound'
 import StateContext from '../StateContext'
 
 function SinglePost() {
@@ -15,6 +16,7 @@ function SinglePost() {
   const appState = useContext(StateContext)
   const [isLoading, setIsLoading] = useState(true)
   const [post, setPost] = useState()
+  const [notFound, setNotFound] = useState(false)
 
   useEffect(() => {
     const ourRequest = Axios.CancelToken.source()
@@ -25,6 +27,8 @@ function SinglePost() {
         if (response.data) {
           setPost(response.data)
           setIsLoading(false)
+        } else {
+          setNotFound(true)
         }
       } catch (e) {
         console.log('There was a problem or the request was cancelled')
@@ -35,6 +39,10 @@ function SinglePost() {
       ourRequest.cancel()
     }
   }, [])
+
+  if (notFound) {
+    return <NotFound />
+  }
 
   if (isLoading) {
     return (
