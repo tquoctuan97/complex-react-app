@@ -40,15 +40,34 @@ function UpdatePost(props) {
         return
       case 'titleChange':
         draft.title.value = action.value
+        draft.title.hasError = false
         return
       case 'bodyChange':
         draft.body.value = action.value
+        draft.body.hasError = false
         return
       case 'submitRequest':
         if (!draft.title.hasError && !draft.body.hasError) {
           draft.sentCount++
+          draft.isSaving = true
         }
         return
+      case 'saveRequestStarted':
+        draft.isSaving = true
+        return
+      case 'saveRequestFinished':
+        draft.isSaving = false
+        return
+      case 'titleRules':
+        if (!action.value.trim()) {
+          draft.title.hasError = true
+          draft.title.message = 'You must provide a title.'
+        }
+      case 'bodyRules':
+        if (!action.value.trim()) {
+          draft.body.hasError = true
+          draft.body.message = 'You must provide a body content.'
+        }
     }
   }
 
@@ -56,6 +75,8 @@ function UpdatePost(props) {
 
   function handleSubmit(e) {
     e.preventDefault(e)
+    dispatch({ type: 'titleRules', value: state.title.value })
+    dispatch({ type: 'bodyRules', value: state.body.value })
     dispatch({ type: 'submitRequest' })
   }
 
@@ -80,6 +101,7 @@ function UpdatePost(props) {
 
   useEffect(() => {
     if (state.sentCount) {
+      dispatch({ type: 'saveRequestStarted' })
       const ourRequest = Axios.CancelToken.source()
 
       async function sendRequest() {
@@ -94,6 +116,7 @@ function UpdatePost(props) {
             { cancelToken: ourRequest.token }
           )
           if (response.data == 'success') {
+            appDispatch({ type: 'saveRequestFinished' })
             appDispatch({ type: 'messages', value: 'Update Post Successfully' })
             props.history.push(`/post/${state.id}`)
           }
@@ -123,17 +146,21 @@ function UpdatePost(props) {
           <label htmlFor="post-title" className="text-muted mb-1">
             <small>Title</small>
           </label>
-          <input value={state.title.value} onChange={e => dispatch({ type: 'titleChange', value: e.target.value })} autoFocus name="title" id="post-title" className="form-control form-control-lg form-control-title" type="text" placeholder="" autoComplete="off" />
+          <input onBlur={e => dispatch({ type: 'titleRules', value: e.target.value })} onChange={e => dispatch({ type: 'titleChange', value: e.target.value })} value={state.title.value} autoFocus name="title" id="post-title" className="form-control form-control-lg form-control-title" type="text" placeholder="" autoComplete="off" />
+          {state.title.hasError && <div className="alert alert-danger small liveValidateMessage">{state.title.message}</div>}
         </div>
 
         <div className="form-group">
           <label htmlFor="post-body" className="text-muted mb-1 d-block">
             <small>Body Content</small>
           </label>
-          <textarea value={state.body.value} onChange={e => dispatch({ type: 'bodyChange', value: e.target.value })} name="body" id="post-body" className="body-content tall-textarea form-control" type="text" />
+          <textarea onBlur={e => dispatch({ type: 'bodyRules', value: e.target.value })} onChange={e => dispatch({ type: 'bodyChange', value: e.target.value })} value={state.body.value} name="body" id="post-body" className="body-content tall-textarea form-control" type="text" />
+          {state.body.hasError && <div className="alert alert-danger small liveValidateMessage">{state.body.message}</div>}
         </div>
 
-        <button className="btn btn-primary">Save New Post</button>
+        <button className="btn btn-primary" disabled={state.isSaving}>
+          Save New Post
+        </button>
       </form>
     </Page>
   )
