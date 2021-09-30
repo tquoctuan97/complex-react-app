@@ -4,10 +4,12 @@ import { useParams } from 'react-router'
 import StateContext from '../StateContext'
 import Page from './Page'
 import ProfilePosts from './ProfilePosts'
+import NotFound from './NotFound'
 
 function Profile() {
   const appState = useContext(StateContext)
   const { username } = useParams()
+  const [notFound, setNotFound] = useState(false)
   const [profileData, setProfileData] = useState({
     profileUsername: '...',
     profileAvatar: 'https://www.gravatar.com/avatar/placeholder?s=128',
@@ -20,9 +22,14 @@ function Profile() {
     async function fetchData() {
       try {
         const response = await Axios.get(`/profile/${username}`, { token: appState.user.token, cancelToken: ourRequest.token })
-        setProfileData(response.data)
+        if (response.data) {
+          setProfileData(response.data)
+        } else {
+          setNotFound(true)
+        }
       } catch (e) {
         console.log('There was a problem or the request was cancelled')
+        setNotFound(true)
       }
     }
     fetchData()
@@ -30,6 +37,10 @@ function Profile() {
       ourRequest.cancel()
     }
   }, [username])
+
+  if (notFound) {
+    return <NotFound />
+  }
 
   return (
     <Page title={`Profile ${username}`}>
