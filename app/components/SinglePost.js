@@ -1,6 +1,6 @@
 import Axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useParams, withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import ReactTooltip from 'react-tooltip'
@@ -10,10 +10,12 @@ import Page from './Page'
 import LoadingDotsIcon from './LoadingDotsIcon'
 import NotFound from './NotFound'
 import StateContext from '../StateContext'
+import DispatchContext from '../DispatchContext'
 
-function SinglePost() {
+function SinglePost(props) {
   const { id } = useParams()
   const appState = useContext(StateContext)
+  const appDispatch = useContext(DispatchContext)
   const [isLoading, setIsLoading] = useState(true)
   const [post, setPost] = useState()
   const [notFound, setNotFound] = useState(false)
@@ -39,6 +41,24 @@ function SinglePost() {
       ourRequest.cancel()
     }
   }, [])
+
+  async function handleDelete() {
+    const areYouSure = window.confirm('Do you really want to delete this post?')
+    if (areYouSure) {
+      try {
+        const response = await Axios.delete(`/post/${id}`, { data: { token: appState.user.token } })
+        if (response.data == 'success') {
+          // 1. display a flash message
+          appDispatch({ type: 'messages', value: 'Post was successfully deleted.' })
+
+          // 2. redirect back to the current user's profile
+          props.history.push(`/profile/${appState.user.username}`)
+        }
+      } catch (e) {
+        console.log('There was a problem.')
+      }
+    }
+  }
 
   if (notFound) {
     return <NotFound />
@@ -72,7 +92,7 @@ function SinglePost() {
               <i className="fas fa-edit"></i>
             </Link>{' '}
             <ReactTooltip id="edit" className="custom-tooltip" />
-            <a data-tip="Delete" data-for="delete" className="delete-post-button text-danger">
+            <a onClick={handleDelete} data-tip="Delete" data-for="delete" className="delete-post-button text-danger">
               <i className="fas fa-trash"></i>
             </a>
             <ReactTooltip id="delete" className="custom-tooltip" />
@@ -94,4 +114,4 @@ function SinglePost() {
   )
 }
 
-export default SinglePost
+export default withRouter(SinglePost)
