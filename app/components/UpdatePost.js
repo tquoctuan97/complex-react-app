@@ -2,6 +2,7 @@ import Axios from 'axios'
 import React, { useContext, useEffect, useReducer, useState } from 'react'
 import { useParams, withRouter } from 'react-router'
 import { useImmerReducer } from 'use-immer'
+import { Link } from 'react-router-dom'
 
 // Components
 import Page from './Page'
@@ -76,7 +77,6 @@ function UpdatePost(props) {
         return
     }
   }
-
   const [state, dispatch] = useImmerReducer(ourReducer, originalState)
 
   function handleSubmit(e) {
@@ -158,7 +158,10 @@ function UpdatePost(props) {
 
   return (
     <Page title="Edit Post">
-      <form onSubmit={handleSubmit}>
+      <Link className="small font-weight-bold" to={`/post/${state.id}`}>
+        « Back to post permaklink
+      </Link>
+      <form className="mt-3" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="post-title" className="text-muted mb-1">
             <small>Title</small>
