@@ -93,7 +93,12 @@ function UpdatePost(props) {
       try {
         const response = await Axios.get(`/post/${state.id}`, { cancelToken: ourRequest.token })
         if (response.data) {
-          dispatch({ type: 'fetchComplete', value: response.data })
+          if (response.data.author.username == appState.user.username) {
+            dispatch({ type: 'fetchComplete', value: response.data })
+          } else {
+            appDispatch({ type: 'messages', value: 'You do not have permission' })
+            props.history.push('/')
+          }
         } else {
           dispatch({ type: 'notFound' })
         }
