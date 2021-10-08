@@ -11,6 +11,7 @@ body {
 }
 
 .header-search-icon {
+  cursor: pointer;
   position: relative;
   top: 3px;
 }
