@@ -15,10 +15,12 @@ function CreatePost(props) {
     e.preventDefault()
     try {
       const response = await Axios.post('/create-post', { title, body, token: appState.user.token })
-      appDispatch({ type: 'messages', value: 'Created Post Successfully' })
-      props.history.push(`/post/${response.data}`)
+      if (response.data) {
+        appDispatch({ type: 'messages', value: 'Created Post Successfully' })
+        props.history.push(`/post/${response.data}`)
+      }
     } catch (e) {
-      console.log(e)
+      console.log('There was a problem.')
     }
   }
 
