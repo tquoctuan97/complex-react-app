@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { useImmerReducer } from 'use-immer'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Axios from 'axios'
+import { CSSTransition } from 'react-transition-group'
 Axios.defaults.baseURL = process.env.BACKENDURL || 'http://m2-social.herokuapp.com/'
 
 import StateContext from './StateContext'
@@ -103,7 +104,9 @@ function Main() {
               <NotFound />
             </Route>
           </Switch>
-          {state.isSearchOpen && <Search />}
+          <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
+            <Search />
+          </CSSTransition>
           <Footer />
         </BrowserRouter>
       </DispatchContext.Provider>
