@@ -40,7 +40,7 @@ function SinglePost(props) {
     return () => {
       ourRequest.cancel()
     }
-  }, [])
+  }, [id])
 
   async function handleDelete() {
     const areYouSure = window.confirm('Do you really want to delete this post?')
